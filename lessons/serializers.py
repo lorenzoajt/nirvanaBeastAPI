@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
-from .models import Lesson
+from .models import Lesson, Instructor
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -13,6 +13,8 @@ class GroupSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'name']
 
 class LessonSerializer(serializers.ModelSerializer):
+    discipline = serializers.StringRelatedField(many=True)
+    skill = serializers.StringRelatedField(many=True)
     class Meta:
         model = Lesson
         fields = '__all__'
@@ -21,4 +23,10 @@ class LessonOverviewSerializer(serializers.ModelSerializer):
     instructor = serializers.StringRelatedField(many=True)
     class Meta: 
         model = Lesson
-        fields = ['title', 'instructor', 'image_link']
+        fields = ['id', 'title', 'instructor', 'image_link']
+
+class InstructorSerializer(serializers.ModelSerializer):
+    discipline = serializers.StringRelatedField(many=True)
+    class Meta:
+        model = Instructor
+        fields = ['id', 'name', 'picture', 'discipline']
